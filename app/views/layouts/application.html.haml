@@ -1,79 +1,79 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 
 %html
-%head
-  %title roro facebook
-  
-  = stylesheet_link_tag 'compiled/screen.css', :media => 'screen, projection'
-  = stylesheet_link_tag 'compiled/print.css', :media => 'print'
-  
-  /[if IE]
-    = stylesheet_link_tag 'compiled/ie.css', :media => 'screen, projection'
+  %head
+    %title roro facebook
 
-  = stylesheet_link_tag 'jquery-ui-themeroller', 'code', 'jquery.rating'
-  
-  = javascript_include_tag 'jquery-1.2.6.min', 'jquery-ui-personalized-1.6rc2.min', 'jquery.rating', 'application.js'
-  
-  = yield :header
-  = yield :feed_tags
+    = stylesheet_link_tag 'compiled/screen.css', :media => 'screen, projection'
+    = stylesheet_link_tag 'compiled/print.css', :media => 'print'
 
-%body{:class=>"#{controller.controller_name.downcase.dasherize} #{controller.controller_name.downcase.dasherize}-#{controller.action_name.downcase.dasherize}"}
-  .header-row
-    .header
-      %a{:href => '/'}
-        %img{:src => '/images/logo.jpg'}
-    .navigation
-      -#.user-search
-      %form.user-search{:action => search_users_path, :method => 'get'}
-        %input{:name => 'q', :value => params[:q]}
-      %ul
-        -if logged_in?
+    /[if IE]
+      = stylesheet_link_tag 'compiled/ie.css', :media => 'screen, projection'
+
+    = stylesheet_link_tag 'jquery-ui-themeroller', 'code', 'jquery.rating'
+
+    = javascript_include_tag 'jquery-1.2.6.min', 'jquery-ui-personalized-1.6rc2.min', 'jquery.rating', 'application.js'
+
+    = yield :header
+    = yield :feed_tags
+
+  %body{:class=>"#{controller.controller_name.downcase.dasherize} #{controller.controller_name.downcase.dasherize}-#{controller.action_name.downcase.dasherize}"}
+    .header-row
+      .header
+        %a{:href => '/'}
+          %img{:src => '/images/logo.jpg'}
+      .navigation
+        -#.user-search
+        %form.user-search{:action => search_users_path, :method => 'get'}
+          %input{:name => 'q', :value => params[:q]}
+        %ul
+          -if logged_in?
+            %li
+              Hi
+              = link_to current_user.nick, user_path(current_user)
+              (
+              = link_to 'log out', logout_path
+              )
+
+          -else
+            %li
+              = link_to 'log in', login_path
+              or
+              = link_to 'sign up', signup_path
+
           %li
-            Hi 
-            = link_to current_user.nick, user_path(current_user)
-            (
-            = link_to 'log out', logout_path
-            )
-          
-        -else
+            = link_to_unless_current 'pinboard', pinboard_users_path
           %li
-            = link_to 'log in', login_path
-            or
-            = link_to 'sign up', signup_path
+            = link_to_unless_current 'hey,beers', beerating_users_path
+          %li
+            = link_to_unless_current 'facets', facets_path
 
-        %li
-          = link_to_unless_current 'pinboard', pinboard_users_path
-        %li
-          = link_to_unless_current 'hey,beers', beerating_users_path
-        %li
-          = link_to_unless_current 'facets', facets_path
+    .content-row
+      .content
+        -#%hr.space
+        -if flash[:shoo]
+          %h2=flash[:shoo]
+        = yield
 
-  .content-row
-    .content
-      -#%hr.space
-      -if flash[:shoo]
-        %h2=flash[:shoo]
-      = yield
+      .sidebar
+        =render :partial => 'shared/sidebar_code'
+        =render :partial => 'shared/sidebar_meetups'
 
-    .sidebar
-      =render :partial => 'shared/sidebar_code'
-      =render :partial => 'shared/sidebar_meetups'
- 
-      =yield(:sidebar)
+        =yield(:sidebar)
 
-    .content-footer
-    -#.sidebar
-    -#  .user-search
-    -#  = yield(:sidebar)
-  
-  .footer-row
-    .footer.quiet
-      All content and design &copy; roro, or the individual authors.  
-  
-  
-  %script{:src=>"http://www.google-analytics.com/urchin.js", :type=>"text/javascript"}
-  :javascript
-    _uacct = "UA-1843540-1";
-    urchinTracker();
+      .content-footer
+      -#.sidebar
+      -#  .user-search
+      -#  = yield(:sidebar)
 
-  =javascripts
+    .footer-row
+      .footer.quiet
+        All content and design &copy; roro, or the individual authors.
+
+
+    %script{:src=>"http://www.google-analytics.com/urchin.js", :type=>"text/javascript"}
+    :javascript
+      _uacct = "UA-1843540-1";
+      urchinTracker();
+
+    =javascripts
